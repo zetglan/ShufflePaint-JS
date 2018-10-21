@@ -75,6 +75,11 @@ window.onload = function() {
 	var splay = game.assets['SEs/spray.mp3'];
 	var fin = game.assets['SEs/fin.mp3'];
 	game.assets['musics/tec.mp3'].play();
+	game.assets['musics/tec.mp3'].stop();
+	game.assets['musics/tra.mp3'].play();
+	game.assets['musics/tra.mp3'].stop();
+	game.assets['musics/roa.mp3'].play();
+	game.assets['musics/roa.mp3'].stop();
 	//エンターキーをAボタンに割り当て
 	game.keybind(16, 'a' );
 
