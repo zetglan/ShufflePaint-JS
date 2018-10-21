@@ -25,6 +25,8 @@ var vol_slider;
 var cookie_age_days = 7; // クッキーの保存日数
 var cookie_save_sec = 24 * 60 * 60 * cookie_age_days;
 var gamebgm;		//1...tec 2...tra,3...roa
+var windowflag = false;
+
 
 window.onload = function() {
 	game = new Game(GAME_SIZE_WIDTH, GAME_SIZE_HEIGHT);
@@ -58,7 +60,7 @@ window.onload = function() {
 		}
 	}
 	
-	console.log(cookieSetting);
+	//console.log(cookieSetting);
 
 
 	//ボリュームスライダーが変更されたらボリュームを変更
@@ -302,7 +304,7 @@ window.onload = function() {
 				//不正解
 				if(getSlctCond(red,blue,yellow)!=ans){
 					//console.log("miss");
-					var windowflag = true;
+					windowflag = true;
 					gamecond=false;	
 					game.assets[numtoBGM(gamebgm)].stop();
 					if(fin_flag){fin.stop();}
@@ -315,7 +317,7 @@ window.onload = function() {
 						//クリック時のイベントを記述
 						if(windowflag){
 							window.open( "http://twitter.com/intent/tweet?text="+encodeURIComponent(twi_message), "_blank" ,'width=400,height=500');
-							windowflag=false;
+							//windowflag=false;
 						}
 					},false);
 
@@ -630,6 +632,7 @@ function restart(){
 		oneflag=true;
 		beepstartflag = false;
 		spraystartflag=false;
+		windowflag=false;
 		bgmname = numtoBGM(gamebgm);
 		game.assets[bgmname].play();
 		gamecond=true;
