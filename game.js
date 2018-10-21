@@ -43,7 +43,7 @@ window.onload = function() {
 	game.preload('images/triangle_blue.png','images/cross_blue.png','images/circle_blue.png');
 	game.preload('images/triangle_yellow.png','images/cross_yellow.png','images/circle_yellow.png');
 	game.preload('musics/tec.mp3','musics/tra.mp3','musics/roa.mp3');
-	game.preload('SEs/spray.mp3','SEs/beep.mp3','SEs/fin.mp3'.'SEs/none.mp3');
+	game.preload('SEs/spray.mp3','SEs/beep.mp3','SEs/fin.mp3','SEs/none.mp3');
 
 	//console.log(document.cookie);
 	var cookies = document.cookie;
