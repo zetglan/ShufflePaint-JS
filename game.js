@@ -308,7 +308,7 @@ window.onload = function() {
 					if(fin_flag){fin.stop();}
 					fin.play();
 					fin_flag=true;
-					var twi_message="ShufflePaintJSで"+game.score+"点を出しました! #ShufflePaintJS";
+					var twi_message="ShufflePaintJSで"+game.score+"点を出しました! #ShufflePaintJS https://zetglan.github.io/ShufflePaint-JS/";
 					var clickElement = document.getElementById("twibutton");
 					
 					clickElement.addEventListener("click", function() {
