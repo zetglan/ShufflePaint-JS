@@ -71,9 +71,13 @@ window.onload = function() {
 
 	//ゲームロード完了したらセッティング
 	game.onload = function() {
-		var beep = game.assets['SEs/beep.mp3'];
-		var splay = game.assets['SEs/spray.mp3'];
-		var fin = game.assets['SEs/fin.mp3'];
+	var beep = game.assets['SEs/beep.mp3'];
+	var splay = game.assets['SEs/spray.mp3'];
+	var fin = game.assets['SEs/fin.mp3'];
+
+	var bgm1 = game.assets['musics/tec.mp3'];
+	var bgm2 = game.assets['musics/tra.mp3'];
+	var bgm3 = game.assets['musics/roa.mp3'];
 		game.assets['SEs/none.mp3'].play();
 
 		//エンターキーをAボタンに割り当て
