@@ -164,7 +164,7 @@ window.onload = function() {
 	});
 
 	game.rootScene.addEventListener(enchant.Event.UP_BUTTON_DOWN, function() {
-		if (game.input.up) {
+		if (game.input.up && gamecond) {
 			game.assets[bgmname].stop()
 			var name=changeBGMtoUp(gamebgm);
 				game.assets[name].play();
@@ -174,7 +174,7 @@ window.onload = function() {
 	});
 
 	game.rootScene.addEventListener(enchant.Event.DOWN_BUTTON_DOWN, function() {
-		if (game.input.down) {
+		if (game.input.down && gamecond) {
 			game.assets[bgmname].stop()
 			var name=changeBGMtoDown(gamebgm);
 				game.assets[name].play();
