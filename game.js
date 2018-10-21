@@ -10,16 +10,21 @@ var threeflag=true;
 var twoflag=true;
 var oneflag=true;
 var restartLabel;
-var bgmname='musics/tec.mp3';
+var bgmname;
 var beepstartflag = false;
 var spraystartflag=false;
-var gamecond=true;//ゲーム続行可能状態の判別
+var gamecond=false;//ゲーム続行可能状態の判別
 var restartLabel = new Label();	//リスタートする？的なラベル
+var titleLabel =new Label();
 var GAME_SIZE_WIDTH = 400;
 var GAME_SIZE_HEIGHT = 250;
 var prev_quiz_ans; //3連続同じお題が出ないように調整するための変数
 var prev_prev_quiz_ans; //同上
 //(画面サイズ8:5の謎設計)
+var vol_slider;
+var cookie_age_days = 7; // クッキーの保存日数
+var cookie_save_sec = 24 * 60 * 60 * cookie_age_days;
+var gamebgm;		//1...tec 2...tra,3...roa
 
 window.onload = function() {
 	game = new Game(GAME_SIZE_WIDTH, GAME_SIZE_HEIGHT);
@@ -27,7 +32,6 @@ window.onload = function() {
 	game.score = 0;
 	game.slctcond=1;	//slctcond:選択中の色，1は赤，2は青，3は黄色
 	game.level=1;		//ゲームの難度レベル(レベル5が最難) と思ってた
-	var gamebgm=1;		//1...tec 2...tra,3...roa
 	var fin_flag=false;	//なんやこれ
 
 	//ゲーム素材予めロード
@@ -39,15 +43,38 @@ window.onload = function() {
 	game.preload('images/triangle_blue.png','images/cross_blue.png','images/circle_blue.png');
 	game.preload('images/triangle_yellow.png','images/cross_yellow.png','images/circle_yellow.png');
 	game.preload('musics/tec.mp3','musics/tra.mp3','musics/roa.mp3');
-	game.preload('SEs/spray.wav','SEs/beep.wav','SEs/fin.wav');
+	game.preload('SEs/spray.mp3','SEs/beep.mp3','SEs/fin.mp3');
+
+	console.log(document.cookie);
+	var cookies = document.cookie;
+	var cookieItem = cookies.split(";");
+	var cookieValue = "";
+	var cookieSetting = {};
+	console.log(cookieItem);
+	if( isset(cookieItem[0]) ){
+		for (i = 0; i < cookieItem.length; i++) {
+			var elem = cookieItem[i].split("=");
+			cookieSetting[elem[0].trim()]=elem[1].trim();
+		}
+	}
+	
+	console.log(cookieSetting);
+
+
+	//ボリュームスライダーが変更されたらボリュームを変更
+	vol_slider = document.getElementById('volume');
+	vol_slider.addEventListener("input",function(){
+		var vol = vol_slider.value/100;
+		document.cookie="volume="+vol+"; max-age="+cookie_save_sec;
+		setSoundvolume(vol);
+	});
 
 	//ゲームロード完了したらセッティング
 	game.onload = function() {
-		var beep = game.assets['SEs/beep.wav'];
-		var splay = game.assets['SEs/spray.wav'];
-		var fin = game.assets['SEs/fin.wav'];
-		//splay.volume=0.7;
-		game.assets['musics/tec.mp3'].play();
+		var beep = game.assets['SEs/beep.mp3'];
+		var splay = game.assets['SEs/spray.mp3'];
+		var fin = game.assets['SEs/fin.mp3'];
+		//game.assets['musics/tec.mp3'].play();
 
 		//エンターキーをAボタンに割り当て
 		game.keybind(16, 'a' );
@@ -163,14 +190,47 @@ window.onload = function() {
 			}
 		});
 		
+		//タイトル画面表示
+		restartLabel.x = 35; 
+		restartLabel.y = 210;
+		restartLabel.text = "PRESS SHIFT KEY OR DOUBLE TAP TO START";
+		game.rootScene.addChild(restartLabel);
+		
+		titleLabel.x = 35;
+		titleLabel.y=100;
+		titleLabel.text = "ShufflePaint-JS";
+		titleLabel.font = "34px Palatino";
+		game.rootScene.addChild(titleLabel);
 
+		game.rootScene.addEventListener(enchant.Event.A_BUTTON_DOWN, function() {
+			if (game.input.a && !(gamecond)) {
+				restart();
+			}
+		});
+		var gesture = new GestureDetector(game.rootScene);
+		game.rootScene.addEventListener(Event.DOUBLETAP, function() {
+			if(!gamecond) {
+				restart();
+			}
+		});
+
+		//クッキーに保存していた値を反映
+		if( isset(cookieSetting['volume']) ){
+			setSoundvolume(cookieSetting['volume']);
+			vol_slider.value = cookieSetting['volume']*100;
+		}
+		if( isset(cookieSetting['gamebgm']) ){
+			gamebgm = parseInt(cookieSetting['gamebgm'],10);
+		}else{
+			gamebgm = 1;
+		}
 		/**************************************************************/
 		/************************* 問 題 設 定 **************************/
 		/**************************************************************/
 
 
 		//次の問題を作成→動く(次の問題生成)→正解判定→動く→正解なら次の問題→正解判定→...の繰り返し
-			restart();
+			//restart();
 			game.addEventListener('enterframe', function () {
 				if(gamecond){ //Game続行状態
 					//3...2...1...go...のスピード設定
@@ -246,7 +306,7 @@ window.onload = function() {
 							}
 						},false);
 
-    						restartLabel.x = 50; restartLabel.y = 210;
+    						restartLabel.x = 30; restartLabel.y = 210;
     						restartLabel.text = "PRESS SHIFT KEY OR DOUBLE TAP TO RESTART";
     						game.rootScene.addChild(restartLabel);
 							
@@ -318,6 +378,7 @@ window.onload = function() {
 	}
 	game.start();
 }
+
 
 
 
@@ -495,13 +556,40 @@ function numtoBGM(num){
 }
 
 function setBGMNumber(name){
-	if(name=='musics/tec.mp3')return 1;
-	if(name=='musics/tra.mp3')return 2;
-	if(name=='musics/roa.mp3')return 3;
+	if(name=='musics/tec.mp3'){
+		document.cookie="gamebgm=1"+"; max-age="+cookie_save_sec;
+			return 1;
+		}
+	if(name=='musics/tra.mp3'){
+		document.cookie="gamebgm=2"+"; max-age="+cookie_save_sec;
+			return 2;
+		}
+	if(name=='musics/roa.mp3'){
+		document.cookie="gamebgm=3"+"; max-age="+cookie_save_sec;
+			return 3;
+		}
+}
+
+function setBGMvolume(vol){
+	game.assets["musics/tec.mp3"].volume = vol;
+	game.assets["musics/roa.mp3"].volume = vol;
+	game.assets["musics/tra.mp3"].volume = vol;
+	game.assets["SEs/fin.mp3"].volume = vol;
+}
+
+function setSEvolume(vol){
+	game.assets["SEs/beep.mp3"].volume = vol;
+	game.assets["SEs/spray.mp3"].volume = vol;
+}
+
+function setSoundvolume(vol){
+	setBGMvolume(vol);
+	setSEvolume(vol);
 }
 
 function restart(){
 		game.rootScene.removeChild(restartLabel);
+		game.rootScene.removeChild(titleLabel);
 		game.rootScene.removeChild(quiz);
 		game.rootScene.removeChild(next_quiz);
 
@@ -529,8 +617,17 @@ function restart(){
 		oneflag=true;
 		beepstartflag = false;
 		spraystartflag=false;
+		bgmname = numtoBGM(gamebgm);
 		game.assets[bgmname].play();
 		gamecond=true;
 		quiz.tl.moveTo(130,60,60/game.level);
 		next_quiz.tl.moveTo(370,60,60/game.level);
 }
+
+function isset(data){
+    if(data === "" || data === null || data === undefined){
+        return false;
+    }else{
+        return true;
+    }
+};
