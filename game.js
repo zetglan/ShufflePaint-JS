@@ -80,6 +80,12 @@ window.onload = function() {
 	game.assets['musics/tra.mp3'].stop();
 	game.assets['musics/roa.mp3'].play();
 	game.assets['musics/roa.mp3'].stop();
+	game.assets['SEs/beep.mp3'].play();
+	game.assets['SEs/beep.mp3'].stop();
+	game.assets['SEs/spray.mp3'].play();
+	game.assets['SEs/spray.mp3'].stop();
+	game.assets['SEs/fin.mp3'].play();
+	game.assets['SEs/fin.mp3'].stop();
 	//エンターキーをAボタンに割り当て
 	game.keybind(16, 'a' );
 
