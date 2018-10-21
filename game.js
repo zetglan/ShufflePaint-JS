@@ -26,7 +26,8 @@ var cookie_age_days = 7; // クッキーの保存日数
 var cookie_save_sec = 24 * 60 * 60 * cookie_age_days;
 var gamebgm;		//1...tec 2...tra,3...roa
 var windowflag = false;
-
+var score = 0;
+var twi_message = "";
 
 window.onload = function() {
 	game = new Game(GAME_SIZE_WIDTH, GAME_SIZE_HEIGHT);
@@ -310,14 +311,13 @@ window.onload = function() {
 					if(fin_flag){fin.stop();}
 					fin.play();
 					fin_flag=true;
-					var twi_message="ShufflePaintJSで"+game.score+"点を出しました! #ShufflePaintJS https://zetglan.github.io/ShufflePaint-JS/";
+					twi_message="ShufflePaintJSで"+game.score+"点を出しました! #ShufflePaintJS https://zetglan.github.io/ShufflePaint-JS/";
 					var clickElement = document.getElementById("twibutton");
 					
 					clickElement.addEventListener("click", function() {
 						//クリック時のイベントを記述
 						if(windowflag){
 							window.open( "http://twitter.com/intent/tweet?text="+encodeURIComponent(twi_message), "_blank" ,'width=400,height=500');
-							//windowflag=false;
 						}
 					},false);
 
@@ -375,6 +375,7 @@ window.onload = function() {
 					fin_quiz.tl.moveTo(-120,60,60/game.level);
 
 					game.score++;
+					score = game.score;
 					if(game.score==5){game.level=2;}
 					else if(game.score==10){game.level=3;}
 					else if(game.score==15){game.level=4;}
@@ -626,6 +627,7 @@ function restart(){
 
 		game.level=1;
 		game.score=0;
+		score = 0;
 		countdown=300+120+game.level*2;
 		threeflag=true;
 		twoflag=true;
