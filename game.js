@@ -21,7 +21,7 @@ var GAME_SIZE_HEIGHT = 250;
 var prev_quiz_ans; //3連続同じお題が出ないように調整するための変数
 var prev_prev_quiz_ans; //同上
 //(画面サイズ8:5の謎設計)
-var vol_slider = document.getElementById('volume');
+var vol_slider;
 var cookie_age_days = 7; // クッキーの保存日数
 var cookie_save_sec = 24 * 60 * 60 * cookie_age_days;
 var gamebgm;		//1...tec 2...tra,3...roa
@@ -62,6 +62,7 @@ window.onload = function() {
 
 
 	//ボリュームスライダーが変更されたらボリュームを変更
+	vol_slider = document.getElementById('volume')
 	vol_slider.addEventListener("input",function(){
 		var vol = vol_slider.value/100;
 		document.cookie="volume="+vol+"; max-age="+cookie_save_sec;
