@@ -45,12 +45,12 @@ window.onload = function() {
 	game.preload('musics/tec.mp3','musics/tra.mp3','musics/roa.mp3');
 	game.preload('SEs/spray.mp3','SEs/beep.mp3','SEs/fin.mp3');
 
-	console.log(document.cookie);
+	//console.log(document.cookie);
 	var cookies = document.cookie;
 	var cookieItem = cookies.split(";");
 	var cookieValue = "";
 	var cookieSetting = {};
-	console.log(cookieItem);
+	//console.log(cookieItem);
 	if( isset(cookieItem[0]) ){
 		for (i = 0; i < cookieItem.length; i++) {
 			var elem = cookieItem[i].split("=");
@@ -58,7 +58,7 @@ window.onload = function() {
 		}
 	}
 	
-	console.log(cookieSetting);
+	//console.log(cookieSetting);
 
 
 	//ボリュームスライダーが変更されたらボリュームを変更
@@ -218,6 +218,9 @@ window.onload = function() {
 		if( isset(cookieSetting['volume']) ){
 			setSoundvolume(cookieSetting['volume']);
 			vol_slider.value = cookieSetting['volume']*100;
+		}else{
+			setSoundvolume(0.4);
+			vol_slider.value = 40;
 		}
 		if( isset(cookieSetting['gamebgm']) ){
 			gamebgm = parseInt(cookieSetting['gamebgm'],10);
